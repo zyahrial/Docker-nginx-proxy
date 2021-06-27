@@ -1,0 +1,13 @@
+# nginx-proxy/docker-compose.yml
+version: "3.3"
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - 80:80
+    networks:
+      - reverse-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+networks:
+  reverse-proxy:

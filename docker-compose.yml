@@ -5,9 +5,26 @@ services:
     image: jwilder/nginx-proxy
     ports:
       - 80:80
+      - 443:443
     networks:
       - reverse-proxy
     volumes:
+      - /etc/nginx/vhost.d
+      - /etc/nginx/certs
+      - /usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+      - LETSENCRYPT_HOST=service-heroagent.heroleads.id
+      - VIRTUAL_HOST=service-heroagent.heroleads.id
+
+  ssl-generator:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - reverse-proxy
+
 networks:
   reverse-proxy:
